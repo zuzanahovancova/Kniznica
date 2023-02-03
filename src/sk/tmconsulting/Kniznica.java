@@ -34,21 +34,30 @@ public class Kniznica {
         // 1.krok: Zobraz menu s polozkou (1) Zadaj novú knihu *  (2) Zobraz všetky knihy   (3) Zobraz konkrétnu knihu (podľa názvu knihy) *
         // TODO 2.krok: Ak sme zadali číslo (1) Zadaj novu knihu,tak poziadame pouzivatela, aby zadal udaje a nasledne opat zobrazime menu s polozkami
 
-        Knihy testovacieKnihy = new Knihy();
+        Knihy objektKnihy = new Knihy();
         // my sme naplnili ArrayList testovacimi knihami cez metodu naplnKniznicuKnihami z triedy Knihy
-        ArrayList<Kniha> kniznica = testovacieKnihy.naplnKniznicuKnihami();
+        ArrayList<Kniha> kniznica = objektKnihy.naplnKniznicuKnihami();
 
         // ArrayList<Kniha> kniznica = new ArrayList<Kniha>(); //tu vytvorime kolekciu knih
         while (true) {
 
-            System.out.println("Vyber si z menu:");
+            System.out.println("\nVyber si z menu:");
             System.out.println("(1) Zadaj novu knihu");
             System.out.println("(2) Zobraz všetky knihy");
             System.out.println("(3) Zobraz konkrétnu knihu (podľa názvu) ");
             System.out.println("(9) Koniec");
 
             Scanner scn = new Scanner(System.in);
-            int cisloMenu = scn.nextInt(); // do premennej cisloMenu vlozime z konzoly cislo, ktore zada pouzivatel
+
+            //try, catch vyuzijeme na "osetrenie" chyby,resp. jej "zablokovanie"
+
+            int cisloMenu = 0;
+            try {
+                cisloMenu = scn.nextInt();
+            } catch (
+                    Exception e) {   // Exception je trieda,ktora nam vypise chybu - ak zadame do kozoly chybu,tak nam nestopne program ale ide to dalej...aby nam aplikacia nespadla...v podstate ignorovanie chyby
+                System.out.println("Pravdepodobne si napísal písmeno namiesto čísla,zopakuj znova!");
+            }
 
             if (cisloMenu == 1) {
                 // ak je cisloMenu = 1 tak tu nieco urobime
@@ -84,6 +93,21 @@ public class Kniznica {
             } else if (cisloMenu == 3) {
                 // ak je cisloMenu = 3 tak tiez tu nieco urobime
                 System.out.println("Stlačil si číslo 3");
+
+                //od pouzivatela budeme chciet zadanie nazvu knihy,ktory ma vyhladat
+                //ak aplikacia najde v nazvoch knih dany nazov,tak vypise zoznam vsetkych najdenych knih
+
+                System.out.println("Zadaj hľadané slovo = názov knihy");
+                Scanner scn2 = new Scanner(System.in); //inicializacia konzoly
+                String nazovHladanychKnih = scn2.nextLine(); // ocakavany vstup od pouzivatela vo forme textu
+                ArrayList<Kniha> najdeneKnihy = objektKnihy.vyhladaneKnihy(kniznica, nazovHladanychKnih); //null je prazdny
+
+                System.out.println("Nájdené knihy");
+                for (Kniha najdenaKniha : najdeneKnihy) {
+                    System.out.println("\nNázov nájdenej knihy: " + najdenaKniha.getNazov());
+                    System.out.println("Autor nájdenej knihy: " + najdenaKniha.getMenoAutora());
+                    System.out.println("Rok vydania: " + najdenaKniha.getRokVydania());
+                }
             } else if (cisloMenu == 9) {
                 //ukoncime nekonecny cyklus while(true) ak pouzivatel zada cislo 9
                 break;
